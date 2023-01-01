@@ -12,9 +12,18 @@ import {
     Drawer,
     ScrollArea,
     Space,
-    Text
+    Text,
+    Anchor,
+    Center,
+    HoverCard,
+    SimpleGrid,
+    ThemeIcon,
+    UnstyledButton,
+    Collapse
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
+import { IconChevronDown, IconH1, IconLivePhoto, IconLayoutGridAdd, IconAdjustments } from '@tabler/icons';
+
 
   
   const useStyles = createStyles((theme) => ({
@@ -82,7 +91,49 @@ export default function Home() {
   const router = useRouter()
   const {data:session} = useSession()
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
+  const features = [
+    {
+      icon: IconH1,
+      title: 'Rich Markdown editor',
+      description: 'Our Markdown syntax highlighting is unique. The refined text formatting of the editor helps you visualize the final rendering of your files.',
+    },
+    {
+      icon: IconAdjustments,
+      title: 'WYSIWYG controls',
+      description: 'We provide very handy formatting buttons and shortcuts, thanks to PageDown, the WYSIWYG-style Markdown editor used by Stack Overflow',
+    },
+    {
+      icon: IconLayoutGridAdd,
+      title: 'Smart layout',
+      description:
+        "Whether you write, you review, you comment… StackEdit's layout provides you with the flexibility you need, without sacrifice.",
+    },
+    {
+      icon: IconLivePhoto,
+      title: 'Live preview with Scroll Sync',
+      description:
+        'Scroll Sync feature accurately binds the scrollbars of the editor panel and the preview panel to ensure that you always keep an eye on the output while writing.',
+    },
+  ];
+  const links = features.map((item) => (
+    <UnstyledButton className={classes.subLink} key={item.title}>
+      <Group noWrap align="flex-start">
+        <ThemeIcon size={34} variant="default" radius="md">
+          <item.icon size={22} color={theme.fn.primaryColor()} />
+        </ThemeIcon>
+        <div>
+          <Text size="sm" weight={500}>
+            {item.title}
+          </Text>
+          <Text size="xs" color="dimmed">
+            {item.description}
+          </Text>
+        </div>
+      </Group>
+    </UnstyledButton>
+  ));
   return (
     <>
     <Box pb={0}>
@@ -102,10 +153,38 @@ export default function Home() {
           <a onClick={() => router.push('/')}>Home</a>
           <Space w="lg" />
           {session && (<a onClick={() => router.push('/pastes')}>View Pastes</a>)}
+          <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
+              <HoverCard.Target>
+                <a href="#" className={classes.link}>
+                  <Center inline>
+                    <Box component="span" mr={5}>
+                      Features
+                    </Box>
+                    <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+                  </Center>
+                </a>
+              </HoverCard.Target>
 
+              <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
+                <Group position="apart" px="md">
+                  <Text weight={500}>Features</Text>
+                </Group>
+
+                <Divider
+                  my="sm"
+                  mx="-md"
+                  color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}
+                />
+
+                <SimpleGrid cols={2} spacing={0}>
+                  {links}
+                </SimpleGrid>
+              </HoverCard.Dropdown>
+            </HoverCard>
           </Group>
           {session && (
   <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm">  
+  
     <Button onClick={() => signOut()} >Sign out</Button>
   </Group>  
 )}
@@ -135,8 +214,16 @@ export default function Home() {
 
           <a onClick={() => router.push('/')}>Home</a>
           <Space w="lg" />
+          <UnstyledButton className={classes.link} onClick={toggleLinks}>
+            <Center inline>
+              <Box component="span" mr={5}>
+                Features
+              </Box>
+              <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+            </Center>
+          </UnstyledButton>
+          <Collapse in={linksOpened}>{links}</Collapse>
           {session && (<a onClick={() => router.push('/pastes')}>View Pastes</a>)}
-
           <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
           {session && (
