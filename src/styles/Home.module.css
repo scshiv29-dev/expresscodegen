@@ -1,0 +1,29 @@
+.image{
+  height: 95vh;
+  width: 100vw;
+  opacity: 0.5;
+}
+.flexer,.read{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+.flexer{
+  flex-direction: column;
+  height: 60vh;
+  margin-bottom: 7rem;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+.read{
+  flex-direction: row;
+  height: 10vh;
+  position: absolute;
+  bottom: 2%;
+  width: 100%;
+}

@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 import { useState } from 'react'
 import {SessionProvider} from 'next-auth/react'
 import { MantineProvider } from '@mantine/core'
+import Header from "../component/Header"
 export default function App({ Component, pageProps }: AppProps) {
   
 
@@ -13,6 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
       /** Put your mantine theme override here */
       colorScheme: 'dark',
     }}>
+    <Header />
     <Component {...pageProps} />
    
     </MantineProvider>
