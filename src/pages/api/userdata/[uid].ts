@@ -7,7 +7,7 @@ export default async function handler(
 ) {
         if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
         const { data, error } = await supabase
-                .from('data')
+                .from('pastes')
                 .select('*')
                 .eq("user", req.query.uid)
         if (error) return res.status(500).json({ error: error.message })
