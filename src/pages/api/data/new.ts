@@ -8,7 +8,7 @@ export default async function handler(
         const { body } = req.body
         if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
         const { data, error } = await supabase
-                .from('data')
+                .from('pastes')
                 .insert({
                         title: req.body.title,
                         content: req.body.content,

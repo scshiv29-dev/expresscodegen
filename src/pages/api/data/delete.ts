@@ -8,7 +8,7 @@ export default async function handler(
         const { body } = req.body
         if (req.method !== 'DELETE') return res.status(405).json({ error: 'Method not allowed' })
         const { data, error } = await supabase
-                .from('data')
+                .from('pastes')
                 .delete()
                 .eq('id', req.query.id)
 
