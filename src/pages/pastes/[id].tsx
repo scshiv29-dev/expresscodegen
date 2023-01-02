@@ -17,7 +17,7 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
         const { req, res } = context;
         const session = await getSession({ req });
         const id=context.params.id
-        console.log(session?.user?.id);
+        console.log(id);
     
         if (!session) {
         res.writeHead(302, {
@@ -27,9 +27,20 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
         return { props: {} };
         }
         else{
-                    const supa=supasupabase(session?.supabaseAccessToken)
+               const supa=supasupabase(session?.supabaseAccessToken)
                         const { data, error } = await supa.from('pastes').select('*').eq('id', id)
-                        console.log(data)
+                      if(data){
+                        const dd:any=data[0]
+                        if(dd.user_id!=session?.user.id){
+                          res.writeHead(302, {
+                            Location:`/view/${id}`,
+                            });
+                            res.end();
+                            return { props: {} };
+                        }
+                      }
+                console.log(data);
+                
                           return {
         props: {
         session,

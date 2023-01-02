@@ -1,10 +1,9 @@
 import React from 'react'
-
 import { useAuth } from '../../component/auth'
 import { getSession } from 'next-auth/react';
 import { getAllUserPastes, supasupabase } from '../../../lib/supabase';
 import Base from '../../component/Base';
-import { Box } from '@mantine/core';
+import { Box, Button } from '@mantine/core';
 import { useRouter } from 'next/router';
 export default function Paste({pastes,session}:any) {
         const router=useRouter()
@@ -26,14 +25,15 @@ return (
         },
       })}
       onClick={()=>router.push(`/pastes/${paste.id}`)}
+      key={paste.id}
       >
-        <div key={paste.id}>
+   
         <h2>{paste.title}</h2>
         
-        </div>
+      
         </Box>
         ))}
-          
+          <Button onClick={()=>router.push('/pastes/new')}>New Paste</Button>
     </Base>
   )}
 
