@@ -9,7 +9,6 @@ import { getSession, useSession } from 'next-auth/react';
 import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen } from '@tabler/icons';
 import Base from '../../component/Base';
 
-
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor"),
   { ssr: false }
@@ -52,20 +51,22 @@ export default function One({id,paste,session}:any) {
 }
   return (
     <Base>
-    
-      <TextInput placeholder="Title" name='title' id='title' required label={"Title"} value={data.title} onChange={(e)=>setData({...data,title:e.target.value})}/>
+      <TextInput placeholder="Title" value={data.title} name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
    <Switch label="View Once" onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
     onLabel={<IconEyeCheck size={16} stroke={2.5}  />}
+    checked={data.isViewOnce}
         offLabel={<IconEyeOff size={16} stroke={2.5}  />}
         description="View Once will make the paste viewable only once you can change it later in your dashboard"
    />
     <Switch label="Anonymous" onChange={()=>setData({...data,anonymous:!data.anonymous})} color={"grape"}
     onLabel={<IconSpy size={16} stroke={2.5}  />}
+    checked={data.anonymous}
         offLabel={<IconSpyOff size={16} stroke={2.5}  />}
         description="Anonymous will make the paste so people dont know who made it"
     />
     <Switch label="Protected" onChange={()=>setData({...data,isProtected:!data.isProtected})} color={"lime"}
     onLabel={<IconLock size={16} stroke={2.5}  />}
+    checked={data.isProtected}
         offLabel={<IconLockOpen size={16} stroke={2.5}  />}
         description="Turning this on people would require passwword to view the paste"
     />
