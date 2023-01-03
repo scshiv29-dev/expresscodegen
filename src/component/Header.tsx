@@ -185,13 +185,15 @@ export default function Home() {
           {session && (
   <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm">  
   
-    <Button onClick={() => signOut()} >Sign out</Button>
+  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign Out</Button>
+
   </Group>  
 )}
 {!session && (
     <>
   <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm"> 
-     <Button onClick={() => signIn()}>Sign in</Button>
+  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign In</Button>
+
   </Group>
   </>
 )}
@@ -228,7 +230,7 @@ export default function Home() {
 
           {session && (
   <Group position="center" grow pb="xl" px="md" mt="sm">  
-    <Button onClick={() => signOut()}>Sign out</Button>
+    <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign Out</Button>
   </Group>
   
 )}

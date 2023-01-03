@@ -32,6 +32,8 @@ export default function One({id,paste,session}:any) {
     content:content,
     user:paste.user
   })
+  console.log("In work:", paste.title);
+  
   const SaveData=async ()=>{
   const dataToSave:PasteR={
     title: data.title,
@@ -50,7 +52,8 @@ export default function One({id,paste,session}:any) {
 }
   return (
     <Base>
-      <TextInput placeholder="Title" name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
+    
+      <TextInput placeholder="Title" name='title' id='title' required label={"Title"} value={data.title} onChange={(e)=>setData({...data,title:e.target.value})}/>
    <Switch label="View Once" onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
     onLabel={<IconEyeCheck size={16} stroke={2.5}  />}
         offLabel={<IconEyeOff size={16} stroke={2.5}  />}
@@ -75,13 +78,17 @@ export default function One({id,paste,session}:any) {
   )
 }
 
-export async function getServerSideProps(context: { req: any; res: any; }) {
+export async function getServerSideProps(context: {
+  params: any; req: any; res: any; 
+}) {
         const { req, res } = context;
         const session = await getSession({ req });
         const id=context.params.id
-        console.log(id);
+        console.log("id",id);
     
+        console.log("This Triggered");
         if (!session) {
+          
         res.writeHead(302, {
         Location: "/",
         });
@@ -91,6 +98,8 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
         else{
                const supa=supasupabase(session?.supabaseAccessToken)
                         const { data, error }= await supa.from('pastes').select('*').eq('id', id)
+                        console.log("Data: ", data);
+                        
                       if(data){
                         const dd:any=data[0]
                         console.log(dd);
