@@ -52,7 +52,7 @@ const SaveData=async ()=>{
   return (
    <Base>
    
-   <TextInput placeholder="Title" name='title' id='title' required label={"Title"}/>
+   <TextInput placeholder="Title" name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
    <Switch label="View Once" onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
     onLabel={<IconEyeCheck size={16} stroke={2.5}  />}
         offLabel={<IconEyeOff size={16} stroke={2.5}  />}

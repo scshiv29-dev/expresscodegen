@@ -65,7 +65,7 @@ export const getPasteAndUpdateView = async (paste_id: string) => {
         return data;
 }
 
-export const updatePaste = async (paste_id: string, token: string, paste: Paste) => {
+export const updatePaste = async (paste_id: string, token: string, paste: PasteR) => {
         const supa = supasupabase(token)
         const { data, error } = await supa
                 .from('pastes')
@@ -92,6 +92,17 @@ export const createPaste = async (paste: PasteR, token: string) => {
         const { data, error } = await supa
                 .from('pastes')
                 .insert(paste)
+        if (error) {
+                console.log(error)
+        }
+        return data;
+}
+export const getPaste = async (paste_id: string) => {
+
+        const { data, error } = await supabase
+                .from('pastes')
+                .select('*')
+                .eq('id', paste_id)
         if (error) {
                 console.log(error)
         }
