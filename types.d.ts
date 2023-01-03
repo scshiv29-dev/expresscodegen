@@ -89,3 +89,25 @@ export interface IdentityData2 {
         email: string
         sub: string
 }
+export type Paste = {
+        id: string
+        created_at: string
+        title: string
+        content: string
+        isViewOnce: boolean
+        views: number
+        anonymous: boolean
+        user: string
+        isProtected: boolean
+        password: any
+}
+export type PasteR = {
+        title: string
+        content: string
+        isViewOnce: boolean
+        views: number
+        anonymous: boolean
+        user: string
+        isProtected: boolean
+        password: any
+}

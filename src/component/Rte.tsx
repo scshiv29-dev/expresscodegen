@@ -14,7 +14,7 @@ function Rte({ content}: { content: any}) {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Underline,
+      Underline,z
       Link,
       Superscript,
       SubScript,

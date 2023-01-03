@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { PasteR } from '../types';
 
 // Initialize Supabase client
 export const supabase = createClient(
@@ -21,9 +22,11 @@ type Paste = {
 // ...
 // Use `useSession()` or `unstable_getServerSession()` to get the NextAuth session.
 export const supasupabase = (supabaseAccessToken: string | undefined) => {
+        console.log(process.env.NEXT_PUBLIC_SUPABASE_URL)
+        console.log(process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY)
         const supabase = createClient(
                 process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-                process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+                process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string,
                 {
                         global: {
                                 headers: {
@@ -84,7 +87,7 @@ export const deletePaste = async (paste_id: string, token: string) => {
         }
         return data;
 }
-export const createPaste = async (paste: Paste, token: string) => {
+export const createPaste = async (paste: PasteR, token: string) => {
         const supa = supasupabase(token)
         const { data, error } = await supa
                 .from('pastes')

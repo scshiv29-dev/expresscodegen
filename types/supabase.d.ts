@@ -1,4 +1,4 @@
-export interface Paste {
+export type Paste = {
         id: string
         created_at: string
         title: string

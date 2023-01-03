@@ -1,7 +1,15 @@
 import React from 'react'
 import { getPasteAndUpdateView, supasupabase } from '../../../lib/supabase';
-import { getSession } from 'next-auth/react';
-import Rte from '../../component/Rte';
+import dynamic from 'next/dynamic';
+import  MarkdownPreview from '@uiw/react-markdown-preview';
+const PreviewMarkdown = dynamic(
+  () =>
+    import("@uiw/react-markdown-preview").then((mod) => {
+      return mod.default;
+    }),
+  { ssr: false }
+);
+
 export default function One({paste,viewOnce}:any) {
   return (
     <>
@@ -11,7 +19,7 @@ export default function One({paste,viewOnce}:any) {
         :
         <>
         <h1>{paste[0].title}</h1>
-        <Rte content={paste[0].content}></Rte>
+        <PreviewMarkdown source={paste[0].content} />
         </>
       }
       
