@@ -50,19 +50,22 @@ export default function One({id,paste,session}:any) {
 }
   return (
     <Base>
-      <TextInput placeholder="Title" name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
+      <TextInput placeholder="Title" value={data.title} name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
    <Switch label="View Once" onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
     onLabel={<IconEyeCheck size={16} stroke={2.5}  />}
+    checked={data.isViewOnce}
         offLabel={<IconEyeOff size={16} stroke={2.5}  />}
         description="View Once will make the paste viewable only once you can change it later in your dashboard"
    />
     <Switch label="Anonymous" onChange={()=>setData({...data,anonymous:!data.anonymous})} color={"grape"}
     onLabel={<IconSpy size={16} stroke={2.5}  />}
+    checked={data.anonymous}
         offLabel={<IconSpyOff size={16} stroke={2.5}  />}
         description="Anonymous will make the paste so people dont know who made it"
     />
     <Switch label="Protected" onChange={()=>setData({...data,isProtected:!data.isProtected})} color={"lime"}
     onLabel={<IconLock size={16} stroke={2.5}  />}
+    checked={data.isProtected}
         offLabel={<IconLockOpen size={16} stroke={2.5}  />}
         description="Turning this on people would require passwword to view the paste"
     />
@@ -106,7 +109,7 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
                     props: {
                     id:id,
                     session,
-                    paste:data
+                    paste:data[0]
                     },
         };
                         
