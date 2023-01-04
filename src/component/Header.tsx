@@ -192,7 +192,7 @@ export default function Home() {
 {!session && (
     <>
   <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm"> 
-  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign In</Button>
+  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signIn()}>Sign In</Button>
 
   </Group>
   </>

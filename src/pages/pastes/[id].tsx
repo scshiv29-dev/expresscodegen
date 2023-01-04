@@ -1,13 +1,14 @@
 import React,{useState} from 'react'
 import { supasupabase,updatePaste } from '../../../lib/supabase';
-import { Button, PasswordInput, Switch, TextInput } from '@mantine/core'
+import { Button, Affix, Transition, Container, PasswordInput, Space, Switch, TextInput, Accordion, Stack,Notification } from '@mantine/core'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { PasteR } from '../../../types';
 import { getSession, useSession } from 'next-auth/react';
-import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen } from '@tabler/icons';
+import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconArrowUp, IconArrowDown ,IconCheck} from '@tabler/icons';
 import Base from '../../component/Base';
+import { useWindowScroll } from '@mantine/hooks';
 
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor"),
@@ -31,7 +32,7 @@ export default function One({id,paste,session}:any) {
     content:content,
     user:paste.user
   })
-  console.log("In work:", paste.title);
+
   
   const SaveData=async ()=>{
   const dataToSave:PasteR={
@@ -46,35 +47,126 @@ export default function One({id,paste,session}:any) {
   }
   const con=await updatePaste(id,session?.supabaseAccessToken,dataToSave)
   if(con){
-    console.log(con);
+   setUpdated(true)
   }
+}
+const [height,setHeight] = useState<any>(200)
+const [scroll, scrollTo] = useWindowScroll();
+const [updated, setUpdated] = useState(false);
+const grow = (element:any) =>{
+  let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
+  setHeight(tempHeight);
 }
   return (
     <Base>
-      <TextInput placeholder="Title" value={data.title} name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
-   <Switch label="View Once" onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
+ <Space h="xl" />
+   <Container  size="sm" px="xl">
+   <TextInput placeholder="Title" name='title' id='title' required label={"Title"} value={data.title} onChange={(e)=>setData({...data,title:e.target.value})}/>
+   <Space h="xl" />
+   <Accordion variant="contained">
+      <Accordion.Item value="viewOnce">
+        <Accordion.Control icon={data.isViewOnce?<IconEyeCheck size={20}  color={"yellow"}/>:<IconEyeOff size={20} color={"yellow"}/>}>
+        View Once
+        </Accordion.Control>
+        <Accordion.Panel>
+          <div style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}>
+          View Once will make the paste viewable only once you can change it later in your dashboard
+        <Switch onChange={()=>setData({...data,isViewOnce:!data.isViewOnce})} color={"yellow"}
     onLabel={<IconEyeCheck size={16} stroke={2.5}  />}
+    offLabel={<IconEyeOff size={16} stroke={2.5}  />}
     checked={data.isViewOnce}
-        offLabel={<IconEyeOff size={16} stroke={2.5}  />}
-        description="View Once will make the paste viewable only once you can change it later in your dashboard"
-   />
-    <Switch label="Anonymous" onChange={()=>setData({...data,anonymous:!data.anonymous})} color={"grape"}
+    />
+    </div>
+    </Accordion.Panel>
+      </Accordion.Item>
+      <Accordion.Item value="ananymous">
+        <Accordion.Control icon={data.anonymous?<IconSpy  size={20}  color="violet"/>:<IconSpyOff size={20} color={"violet"}/>}>
+        Anonymous
+        </Accordion.Control>
+        <Accordion.Panel>
+        <div style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}>
+        Anonymous will make the paste so people dont know who made it 
+        <Switch onChange={()=>setData({...data,anonymous:!data.anonymous})} color={"grape"}
     onLabel={<IconSpy size={16} stroke={2.5}  />}
+    offLabel={<IconSpyOff size={16} stroke={2.5}  />}
     checked={data.anonymous}
-        offLabel={<IconSpyOff size={16} stroke={2.5}  />}
-        description="Anonymous will make the paste so people dont know who made it"
     />
-    <Switch label="Protected" onChange={()=>setData({...data,isProtected:!data.isProtected})} color={"lime"}
+    </div>
+    </Accordion.Panel>
+      </Accordion.Item>
+      <Accordion.Item value="protected">
+        <Accordion.Control icon={data.isProtected?<IconLock size={20}  color={"lime"}/>:<IconLockOpen size={20} color={"lime"}/>}>
+        Protected
+        </Accordion.Control>
+        <Accordion.Panel>
+        <div style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}>
+        Turning this on people would require passwword to view the paste
+        <Switch onChange={()=>setData({...data,isProtected:!data.isProtected})} color={"lime"}
     onLabel={<IconLock size={16} stroke={2.5}  />}
+    offLabel={<IconLockOpen size={16} stroke={2.5}  />}
     checked={data.isProtected}
-        offLabel={<IconLockOpen size={16} stroke={2.5}  />}
-        description="Turning this on people would require passwword to view the paste"
     />
-    {data.isProtected&&<PasswordInput placeholder="Password" name={"password"}  id='password'required label={"Password"}/>
-    }
-      <MDEditor value={content} onChange={setContent} >
-        <EditerMarkdown source={content} />
-      </MDEditor>
+    </div>
+    {data.isProtected&&<PasswordInput placeholder="Password" name={"password"}  id='password'required label={"Password"}/>}
+    </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion >
+
+    </Container>
+    <Space h={100} />
+        <Container size={2000} px="xl">
+        <Affix position={{ bottom: 20, right: 20 }}>
+          
+        <Transition transition="slide-up" mounted={scroll.y > 0}>
+          {(transitionStyles) => (
+            <Stack >
+            <Button
+              leftIcon={<IconArrowUp size={16} />}
+              style={transitionStyles}
+              onClick={() => scrollTo({ y: 0 })}
+              variant="outline"
+            >
+              Scroll to Top
+            </Button>
+            <Button
+              leftIcon={<IconArrowDown size={16} />}
+              style={transitionStyles}
+              onClick={() => scrollTo({ y: height })}
+              variant="outline"
+            >
+              Scroll to Bottom
+            </Button>
+            </Stack>
+          )}
+        </Transition>
+      </Affix>
+      {updated &&       <Notification icon={<IconCheck size={18} />} color="teal" title="Teal notification">
+        This is teal notification with icon
+      </Notification>
+}
+          <MDEditor value={content} onChange={setContent} minHeight={200} height={height} onInput={(element) => grow(element)}>
+            <EditerMarkdown source={content} />
+          </MDEditor>
+          <Space h="lg" />
+          <Stack align="center">
+          <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
+          </Stack>
+        </Container>
+{/* {JSON.stringify(session)}
+{JSON.stringify(data)} */}
+    <Space h={"lg"} />
     </Base>
   )
 }
@@ -99,11 +191,11 @@ export async function getServerSideProps(context: {
         else{
                const supa=supasupabase(session?.supabaseAccessToken)
                         const { data, error }= await supa.from('pastes').select('*').eq('id', id)
-                        console.log("Data: ", data);
+                        
                         
                       if(data){
                         const dd:any=data[0]
-                        console.log(dd);
+              
                         if(dd.user!==session?.user.id){
                           res.writeHead(302, {
                             Location:`/view/${id}`,
@@ -116,7 +208,7 @@ export async function getServerSideProps(context: {
                     props: {
                     id:id,
                     session,
-                    paste:data
+                    paste:data[0]
                     },
         };
                         
