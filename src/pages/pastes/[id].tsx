@@ -1,12 +1,12 @@
 import React,{useState} from 'react'
 import { supasupabase,updatePaste } from '../../../lib/supabase';
-import { Button, Affix, Transition, Container, PasswordInput, Space, Switch, TextInput, Accordion, Stack,Notification } from '@mantine/core'
+import { Button, Affix, Transition, Container, PasswordInput, Space, Switch, TextInput, Accordion, Stack,Notification, Input, Alert } from '@mantine/core'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { PasteR } from '../../../types';
 import { getSession, useSession } from 'next-auth/react';
-import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconArrowUp, IconArrowDown ,IconCheck} from '@tabler/icons';
+import {IconShare, IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconArrowUp, IconArrowDown ,IconCheck} from '@tabler/icons';
 import Base from '../../component/Base';
 import { useWindowScroll } from '@mantine/hooks';
 
@@ -23,6 +23,7 @@ const EditerMarkdown = dynamic(
 );
 export default function One({id,paste,session}:any) {
     const [content,setContent]=useState<any>(paste.content)
+    const [shareAble,setShareAble]=useState(`http://localhost:3000/view/${id}`)
   const[data,setData]=useState<any>({
         title:paste.title,
     isViewOnce:paste.isViewOnce,
@@ -30,7 +31,9 @@ export default function One({id,paste,session}:any) {
     isProtected:paste.isProtected,
     password:paste.password,
     content:content,
-    user:paste.user
+    user:paste.user,
+    isShortened:paste.isShortened,
+    shortUrl:paste.shortUrl
   })
 
   
@@ -43,7 +46,9 @@ export default function One({id,paste,session}:any) {
     password: data.password,
     content: content,
     views: 0,
-    user: data.user
+    user: data.user,
+    isShortened:data.isShortened,
+    shortUrl:data.shortenedUrl
   }
   const con=await updatePaste(id,session?.supabaseAccessToken,dataToSave)
   if(con){
@@ -56,6 +61,25 @@ const [updated, setUpdated] = useState(false);
 const grow = (element:any) =>{
   let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
   setHeight(tempHeight);
+}
+const shortenUrl = async () => {
+  const dd= await fetch("https://linkjaye.ga/shorten",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      'Access-Control-Allow-Origin' : '*',
+      
+    },
+  
+    body:JSON.stringify({
+      "fullUrl":shareAble,
+    })
+  })
+ const res= await dd.json()
+ const data=updatePaste(id,session?.supabaseAccessToken,{isShortened:true,shortUrl:res.shortUrl})
+ setShareAble(res.shortUrl)
+  setData({...data,isShortened:true,shortUrl:res.shortUrl})
+ 
 }
   return (
     <Base>
@@ -83,8 +107,8 @@ const grow = (element:any) =>{
     </div>
     </Accordion.Panel>
       </Accordion.Item>
-      <Accordion.Item value="ananymous">
-        <Accordion.Control icon={data.anonymous?<IconSpy  size={20}  color="violet"/>:<IconSpyOff size={20} color={"violet"}/>}>
+      <Accordion.Item value="anonymous">
+        <Accordion.Control icon={data.anonymous?<IconSpy  size={20}  color="violet"/>:<IconSpyOff size={20} color={"red"}/>}>
         Anonymous
         </Accordion.Control>
         <Accordion.Panel>
@@ -122,6 +146,30 @@ const grow = (element:any) =>{
     {data.isProtected&&<PasswordInput placeholder="Password" name={"password"}  id='password'required label={"Password"}/>}
     </Accordion.Panel>
       </Accordion.Item>
+            <Accordion.Item value="ananymous">
+        <Accordion.Control icon={data.anonymous?<IconShare  size={20}  color="violet"/>:<IconShare size={20} color={"violet"}/>}>
+        Share
+        </Accordion.Control>
+        <Accordion.Panel>
+        <div style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}>
+   {data.isShortened &&       <Input
+          icon={<IconShare />}
+           variant="filled"
+            placeholder="Shortened Url"
+            width={300}
+             value={data.shortUrl}
+             disabled
+          />}
+          <Button onClick={()=>{navigator.clipboard.writeText(shareAble)}}>Copy</Button>
+          
+          <Button onClick={()=>{shortenUrl()}} disabled={data.isShortened}>Shorten</Button>
+    </div>
+    </Accordion.Panel>
+    </Accordion.Item>
     </Accordion >
 
     </Container>
@@ -152,10 +200,7 @@ const grow = (element:any) =>{
           )}
         </Transition>
       </Affix>
-      {updated &&       <Notification icon={<IconCheck size={18} />} color="teal" title="Teal notification">
-        This is teal notification with icon
-      </Notification>
-}
+
           <MDEditor value={content} onChange={setContent} minHeight={200} height={height} onInput={(element) => grow(element)}>
             <EditerMarkdown source={content} />
           </MDEditor>
@@ -164,9 +209,10 @@ const grow = (element:any) =>{
           <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
           </Stack>
         </Container>
-{/* {JSON.stringify(session)}
-{JSON.stringify(data)} */}
+ 
+
     <Space h={"lg"} />
+
     </Base>
   )
 }
@@ -195,7 +241,8 @@ export async function getServerSideProps(context: {
                         
                       if(data){
                         const dd:any=data[0]
-              
+                        console.log(dd);
+                        
                         if(dd.user!==session?.user.id){
                           res.writeHead(302, {
                             Location:`/view/${id}`,

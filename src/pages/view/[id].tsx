@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { getPasteAndUpdateView, supasupabase } from '../../../lib/supabase';
+import { getPasteAndUpdateView, getUserDetails, supasupabase } from '../../../lib/supabase';
 import dynamic from 'next/dynamic';
 import  MarkdownPreview from '@uiw/react-markdown-preview';
-import {  Button, Container,Divider,Group,HoverCard,Popover,Skeleton,Space,Text, Tooltip } from '@mantine/core';
+import {  Avatar, Button, Container,Divider,Group,HoverCard,Popover,Skeleton,Space,Text, Tooltip } from '@mantine/core';
 import { IconEyeCheck, IconEyeOff, IconLock, IconLockOpen, IconSpy, IconSpyOff } from '@tabler/icons';
 const PreviewMarkdown = dynamic(
   () =>
@@ -12,7 +12,7 @@ const PreviewMarkdown = dynamic(
   { ssr: false }
 );
 
-export default function One({paste,viewOnce}:any) {
+export default function One({paste,viewOnce,user}:any) {
   console.log(paste[0])
   const [loading, setLoading] = useState(true);
   setTimeout(() => {
@@ -89,8 +89,23 @@ export default function One({paste,viewOnce}:any) {
           {paste[0].isProtected?"Protected":"Not Protected" }
           </Text>
         </HoverCard.Dropdown>
-      </HoverCard>
-
+        </HoverCard>
+{!paste[0].anonymouse?
+      <HoverCard width={280} shadow="md" >
+      <HoverCard.Target>
+      <Button variant="subtle" color="dark">
+          <Avatar src={user.image} size="lg" />
+        </Button>
+        </HoverCard.Target>
+        <HoverCard.Dropdown>
+          <Text size="sm">
+          {user.name}
+          </Text>
+        </HoverCard.Dropdown>
+        </HoverCard>
+        :
+        null
+      }
 
         </Group>
         </div>
@@ -117,21 +132,27 @@ export async function getServerSideProps(context: {
         const id=context.params.id
         console.log(id);
          const data = await getPasteAndUpdateView(id)
+        const user =await getUserDetails(data[0].user)
+        console.log("user",user);
          if(data){
           const dd:any=data[0]
           console.log(dd);
-          
+          if(!dd.anonymous){
+
+          }
             if(dd.isViewOnce){
               return {
                 props: {
-                  viewOnce:true
+                  viewOnce:true,
+                  paste:data
               },
           }
         }
       }  
   return {
         props: {
-        paste:data
+        paste:data,
+        user:user[0]
         },
         };
                         

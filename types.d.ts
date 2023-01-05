@@ -110,4 +110,6 @@ export type PasteR = {
         user: string
         isProtected: boolean
         password: any
+        isShortened: boolean
+        shortUrl: string
 }

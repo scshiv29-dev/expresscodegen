@@ -65,7 +65,7 @@ export const getPasteAndUpdateView = async (paste_id: string) => {
         return data;
 }
 
-export const updatePaste = async (paste_id: string, token: string, paste: PasteR) => {
+export const updatePaste = async (paste_id: string, token: string, paste: any) => {
         const supa = supasupabase(token)
         const { data, error } = await supa
                 .from('pastes')
@@ -103,6 +103,29 @@ export const getPaste = async (paste_id: string) => {
                 .from('pastes')
                 .select('*')
                 .eq('id', paste_id)
+        if (error) {
+                console.log(error)
+        }
+        return data;
+}
+
+const getPasteUser = async (paste_id: string) => {
+
+        const { data, error } = await supabase
+                .from('pastes')
+                .select('user')
+                .eq('id', paste_id)
+        if (error) {
+                console.log(error)
+        }
+        return data;
+}
+
+export const getUserDetails = async (user_id: string) => {
+        const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', user_id)
         if (error) {
                 console.log(error)
         }
