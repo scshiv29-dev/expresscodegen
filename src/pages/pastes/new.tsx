@@ -1,14 +1,15 @@
 import React,{useState} from 'react'
 import Base from '../../component/Base'
-import { Button, Affix, Transition, Container, PasswordInput, Space, Switch, TextInput, Accordion, Stack } from '@mantine/core'
+import { Button, Affix, Transition, Container,Notification, PasswordInput, Space, Switch, TextInput, Accordion, Stack } from '@mantine/core'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { PasteR } from '../../../types';
 import { getSession, useSession } from 'next-auth/react';
-import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconGrowth, IconArrowDown, IconArrowUp } from '@tabler/icons';
+import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconGrowth, IconArrowDown, IconArrowUp, IconCheck } from '@tabler/icons';
 import { createPaste } from '../../../lib/supabase';
 import { useWindowScroll } from '@mantine/hooks';
+import { log } from 'console';
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor"),
   { ssr: false }
@@ -24,6 +25,7 @@ const EditerMarkdown = dynamic(
 export default function New({session}:any) {
   
   const [content,setContent]=useState<any>('')
+  const [loading,setLoading]=useState<any>(false)
   const[data,setData]=useState<any>({
         title:'',
     isViewOnce:false,
@@ -40,6 +42,7 @@ const grow = (element:any) =>{
   setHeight(tempHeight);
 }
 const SaveData=async ()=>{
+
   const dataToSave:PasteR={
     title: data.title,
     isViewOnce: data.isViewOnce,
@@ -52,8 +55,10 @@ const SaveData=async ()=>{
   }
   const con=await createPaste(dataToSave,session?.supabaseAccessToken)
   if(con){
-    console.log(con);
+   console.log(con)
+   
   }
+
 }
   return (
    <Base>
