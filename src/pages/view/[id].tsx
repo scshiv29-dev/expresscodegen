@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { getPasteAndUpdateView, getUserDetails, supasupabase } from '../../../lib/supabase';
 import dynamic from 'next/dynamic';
 import  MarkdownPreview from '@uiw/react-markdown-preview';
-import {  Avatar, Button, Container,Divider,Group,HoverCard,Popover,Skeleton,Space,Text, Tooltip } from '@mantine/core';
+import {  Avatar, Button, Container,Divider,Group,HoverCard,Overlay,Paper,PasswordInput,Popover,Skeleton,Space,Text, Tooltip } from '@mantine/core';
 import { IconEyeCheck, IconEyeOff, IconLock, IconLockOpen, IconSpy, IconSpyOff } from '@tabler/icons';
 const PreviewMarkdown = dynamic(
   () =>
@@ -13,19 +13,59 @@ const PreviewMarkdown = dynamic(
 );
 
 export default function One({paste,viewOnce,user}:any) {
-  console.log(paste[0])
+
   const [loading, setLoading] = useState(true);
+  const [isProtected, setIsProtected] = useState(paste[0].isProtected);
+  const [password, setPassword] = useState('');
+  const [error,setError] = useState({
+    error:false,
+    message:''
+  })
+  const validatePassword = async () => {
+    if(password===paste[0].password){
+      setIsProtected(false)
+    }
+    else{
+      setError({
+        error:true,
+        message:'Wrong password'
+      })
+    }
+
+  };
   setTimeout(() => {
     setLoading(false);
   }, 1000);
   return (
     <>
-      {
+
         
+       { isProtected?
+       <Container size="xl" px="xl" w={600}>
+      <Space h={250} />
+        <Paper shadow="sm" p="lg" withBorder>
+
+        <Text size="lg" weight={500} ta="center">
+        <IconLock size={32}  color={"red"}/> <br/>This paste is protected
+        </Text>
+        <Space h="lg" />
+        <PasswordInput placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} error={error.message} />
+        <Space h="lg" />
+        <Button variant="outline" color="red"  onClick={() => validatePassword()}>
+          Submit
+        </Button>
+      </Paper>
+
+      </Container>:
         viewOnce?
-        <div style={{textAlign:'center',marginTop:'20px'}}>
-        <h1> This paste was made private or was set to view Once and cannot be viewed anymore ask the author to make turn of view Once</h1>
-        </div>
+        <Container size="xl" px="xl" w={600}>
+      <Space h={250} />
+      <Paper shadow="sm" p="lg" withBorder style={{color:"#C92A2A"}}>
+        <Text fw={700} fz={30}> 
+         This paste was made private or was set to view Once and cannot be viewed anymore ask the author to make turn off view Once
+        </Text>
+      </Paper>
+        </Container>
         :
         
         <Container size={2000} px="xl" >
@@ -64,21 +104,6 @@ export default function One({paste,viewOnce,user}:any) {
         <HoverCard width={280} shadow="md" >
         <HoverCard.Target>
         <Button variant="subtle" color="dark">    
-      {paste[0].anonymous?
-      <IconSpy  size={32}  color="violet"/>
-      :<IconSpyOff size={32} color={"violet"}/>}
-        </Button>
-        </HoverCard.Target>
-        <HoverCard.Dropdown>
-          <Text size="sm">
-          {paste[0].anonymous?"Anonymous":"Not Anonymous" }
-          </Text>
-        </HoverCard.Dropdown>
-      </HoverCard>
-
-        <HoverCard width={280} shadow="md" >
-        <HoverCard.Target>
-        <Button variant="subtle" color="dark">    
       {paste[0].isProtected?
       <IconLock size={32}  color={"lime"}/>
       :<IconLockOpen size={32} color={"lime"}/>}
@@ -90,22 +115,21 @@ export default function One({paste,viewOnce,user}:any) {
           </Text>
         </HoverCard.Dropdown>
         </HoverCard>
-{!paste[0].anonymouse?
-      <HoverCard width={280} shadow="md" >
-      <HoverCard.Target>
-      <Button variant="subtle" color="dark">
-          <Avatar src={user.image} size="lg" />
+
+        <HoverCard width={280} shadow="md" >
+        <HoverCard.Target>
+        <Button variant="subtle" color="dark">    
+      {paste[0].anonymous?
+      <IconSpy  size={32}  color="violet"/>
+      :<Avatar src={user.image} radius={"xl"} size={32} style={{objectFit: "cover"}}/>}
         </Button>
         </HoverCard.Target>
         <HoverCard.Dropdown>
           <Text size="sm">
-          {user.name}
+          {paste[0].anonymous?"Anonymous":user.name }
           </Text>
         </HoverCard.Dropdown>
-        </HoverCard>
-        :
-        null
-      }
+      </HoverCard>
 
         </Group>
         </div>

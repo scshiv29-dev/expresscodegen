@@ -19,7 +19,8 @@ import {
     SimpleGrid,
     ThemeIcon,
     UnstyledButton,
-    Collapse
+    Collapse,
+    Avatar,
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconH1, IconLivePhoto, IconLayoutGridAdd, IconAdjustments } from '@tabler/icons';
@@ -137,7 +138,7 @@ export default function Home() {
   return (
     <>
     <Box pb={0}>
-      <Header height={60} px="md">
+      <Header height={70}  px="md">
         <Group position="apart" sx={{ height: '100%' }}>
         <Text  
       variant="gradient"
@@ -183,15 +184,26 @@ export default function Home() {
             </HoverCard>
           </Group>
           {session && (
-  <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm">  
+  <Group position="center" className={classes.hiddenMobile}  pb="xl" px="md" mt="sm">  
   
   <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign Out</Button>
+  <HoverCard  shadow="md" >
+        <HoverCard.Target>
+  
+        <Avatar src={session.user.image} radius={"xl"} size={45} style={{objectFit: "cover"}} />
 
+        </HoverCard.Target>
+        <HoverCard.Dropdown>
+          <Text size="sm">
+          {session.user.name}
+          </Text>
+        </HoverCard.Dropdown>
+      </HoverCard>
   </Group>  
-)}
+  )}
 {!session && (
     <>
-  <Group position="center" className={classes.hiddenMobile} grow pb="xl" px="md" mt="sm"> 
+  <Group position="center" className={classes.hiddenMobile} pb="xl" px="md" mt="sm"> 
   <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signIn()}>Sign In</Button>
 
   </Group>

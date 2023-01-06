@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import Base from '../../component/Base'
-import { Button, Affix, Transition, Container,Notification, PasswordInput, Space, Switch, TextInput, Accordion, Stack } from '@mantine/core'
+import { Button, Affix, Transition, Container,Notification,Text, PasswordInput, Space, Switch, Badge, Input, Accordion, Stack, Dialog } from '@mantine/core'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
@@ -37,12 +37,33 @@ export default function New({session}:any) {
   })
 const [height,setHeight] = useState<any>(200)
 const [scroll, scrollTo] = useWindowScroll();
+const [error, setError] = useState<any>({
+  error:false,
+  message:''
+});
 const grow = (element:any) =>{
   let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
   setHeight(tempHeight);
 }
 const SaveData=async ()=>{
-
+  if(data.title===''){
+    setError(true)
+    return
+  }
+  
+  
+  if(data.isProtected && data.password===''){
+    setError({
+      error:true,
+      message:'Password is required'
+    })
+    return
+    }
+  setError({
+      error:false,
+      message:'Saved'
+    }
+  )
   const dataToSave:PasteR={
     title: data.title,
     isViewOnce: data.isViewOnce,
@@ -51,8 +72,16 @@ const SaveData=async ()=>{
     password: data.password,
     content: content,
     views: 0,
-    user: data.user
+    user: data.user,
+    isShortened: false,
+    shortUrl: ''
   }
+  setTimeout(()=>{
+    setError({
+      error:false,
+      message:''
+    })
+  },2000)
   const con=await createPaste(dataToSave,session?.supabaseAccessToken)
   if(con){
    console.log(con)
@@ -64,7 +93,15 @@ const SaveData=async ()=>{
    <Base>
    <Space h="xl" />
    <Container  size="sm" px="xl">
-   <TextInput placeholder="Title" name='title' id='title' required label={"Title"} onChange={(e)=>setData({...data,title:e.target.value})}/>
+   <Input.Wrapper
+      id="title"
+      withAsterisk
+      label="Title"
+      description="Please give a title to your paste"
+      error={error.message==='Title is required'?error.message:''}
+    >
+      <Input id="title" placeholder="Title"  onChange={(e)=>setData({...data,title:e.target.value})}/>
+    </Input.Wrapper>
    <Space h="xl" />
    <Accordion variant="contained">
       <Accordion.Item value="viewOnce">
@@ -119,7 +156,15 @@ const SaveData=async ()=>{
     offLabel={<IconLockOpen size={16} stroke={2.5}  />}
     />
     </div>
-    {data.isProtected&&<PasswordInput placeholder="Password" name={"password"}  id='password'required label={"Password"}/>}
+    {data.isProtected&&<PasswordInput
+     placeholder="Password" 
+     name={"password"} 
+    id='password' 
+    withAsterisk label={"Password"}
+    value={data.password}
+    onChange={(e)=>setData({...data,password:e.target.value})}
+    error={error.message==='Password is required'?error.message:''}
+    />}
     </Accordion.Panel>
       </Accordion.Item>
     </Accordion >
@@ -156,8 +201,25 @@ const SaveData=async ()=>{
             <EditerMarkdown source={content} />
           </MDEditor>
           <Space h="lg" />
+          {console.log(!(error.message==="Saved"))}
           <Stack align="center">
           <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
+          <Dialog
+        opened={(error.message==="Saved")}
+        size="lg"
+        radius="md"
+        shadow="lg"
+        style={{backgroundColor:"#087F5B"}}
+        withCloseButton
+        onClose={() => setError({error:false,message:""})}
+      >
+        <Text 
+        tt="uppercase"      
+        sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
+        fz="xl"
+        fw={700}
+      >Saved</Text>
+        </Dialog>
           </Stack>
         </Container>
 {/* {JSON.stringify(session)}
