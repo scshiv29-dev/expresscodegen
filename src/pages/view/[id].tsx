@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { getPasteAndUpdateView, getUserDetails, supasupabase } from '../../../lib/supabase';
 import dynamic from 'next/dynamic';
-import  MarkdownPreview from '@uiw/react-markdown-preview';
-import {  Avatar, Button, Container,Divider,Group,HoverCard,Overlay,Paper,PasswordInput,Popover,Skeleton,Space,Text, Tooltip } from '@mantine/core';
-import { IconEyeCheck, IconEyeOff, IconLock, IconLockOpen, IconSpy, IconSpyOff } from '@tabler/icons';
+import {  Avatar, Button, Container,Divider,Group,HoverCard,Paper,PasswordInput,Skeleton,Space,Text } from '@mantine/core';
+import { IconEyeCheck, IconEyeOff, IconLock, IconLockOpen, IconSpy } from '@tabler/icons';
 const PreviewMarkdown = dynamic(
   () =>
     import("@uiw/react-markdown-preview").then((mod) => {

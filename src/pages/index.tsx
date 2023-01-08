@@ -23,24 +23,24 @@ const features = [
   {
     icon: IconH1,
     title: 'Rich Markdown editor',
-    description: 'Our Markdown syntax highlighting is unique. The refined text formatting of the editor helps you visualize the final rendering of your files.',
+    description: "Using our Markdown syntax highlighting, you'll be able to visualise final rendering of your documents",
   },
   {
     icon: IconAdjustments,
-    title: 'WYSIWYG controls',
-    description: 'We provide very handy formatting buttons and shortcuts, thanks to PageDown, the WYSIWYG-style Markdown editor used by Stack Overflow',
+    title: 'Controls',
+    description: 'Easy to use controls to make your documents look the way you want them to',
   },
   {
     icon: IconLayoutGridAdd,
-    title: 'Smart layout',
+    title: 'Elegant layout',
     description:
-      "Whether you write, you review, you comment… StackEdit's layout provides you with the flexibility you need, without sacrifice.",
+      "Whatever you do... Markdown Editor's layout provides the flexibility you need, without sacrificing quality.",
   },
   {
     icon: IconLivePhoto,
-    title: 'Live preview with Scroll Sync',
+    title: 'Scroll synchronized live preview.',
     description:
-      'Scroll Sync feature accurately binds the scrollbars of the editor panel and the preview panel to ensure that you always keep an eye on the output while writing.',
+      'By using Scroll Sync, you are always able to see the output if you are writing while simultaneously scrolling the editor or preview panels.',
   },
 ];
 
