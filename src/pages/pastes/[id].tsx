@@ -312,14 +312,15 @@ export async function getServerSideProps(context: {
                             res.end();
                             return { props: {} };
                         }
-                      }
-                          return {
+                                        return {
                     props: {
                     id:id,
                     session,
                     paste:data[0]
                     },
         };
+                      }
+          
                         
         }
 

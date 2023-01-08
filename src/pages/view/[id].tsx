@@ -156,31 +156,23 @@ export async function getServerSideProps(context: {
         const id=context.params.id
         console.log(id);
          const data = await getPasteAndUpdateView(id)
-        const user =await getUserDetails(data[0].user)
-        
-         if(data){
-          const dd:any=data[0]
-          
-          if(!dd.anonymous){
-
-          }
-            if(dd.isViewOnce){
-              return {
-                props: {
-                  viewOnce:true,
-                  paste:data
-              },
-          }
-        }
-      }  
-  return {
+    if(data){
+      const user = await getUserDetails(data[0].userId)
+      return {
         props: {
-        paste:data,
-        user:user[0]
+          paste: data,
+          viewOnce:data[0].isViewOnce,
+          user:user
         },
-        };
-                        
-        }
+      };
+    }
+    else{
+      res.writeHead(302, {
+                            Location:`/`,
+                            });
+                            res.end();
+                            return { props: {} };
+    }
 
-      
-        
+       
+}
