@@ -23,6 +23,7 @@ const EditerMarkdown = dynamic(
 );
 
 export default function New({session,titles}:any) {
+
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
   const[data,setData]=useState<any>({
@@ -44,15 +45,6 @@ const grow = (element:any) =>{
   let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
   setHeight(tempHeight);
 }
-const checkAlredyExists=async (title:string)=>{
-for(let i=0;i<titles.length;i++){
-  if(titles[i].title===title){
-    setError({
-      error:true,
-      message:'Title already exists'
-    })
-    return true
-  }
 const SaveData=async ()=>{
   console.log(data)
   if(data.title===''){
@@ -62,7 +54,13 @@ const SaveData=async ()=>{
     })
     return
   }
-  checkAlredyExists(data.title)
+  if(data.title in titles){
+    console.log('title exists')
+    setError({
+      error:true,
+      message:'Title already exists'
+    })
+    
   
   if(data.isProtected && data.password===''){
     setError({
