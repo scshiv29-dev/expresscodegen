@@ -88,6 +88,8 @@ export const deletePaste = async (paste_id: string, token: string) => {
         return data;
 }
 export const createPaste = async (paste: PasteR, token: string) => {
+        console.log(paste);
+
         const supa = supasupabase(token)
         const { data, error } = await supa
                 .from('pastes')

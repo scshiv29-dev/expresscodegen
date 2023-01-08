@@ -23,7 +23,6 @@ const EditerMarkdown = dynamic(
 );
 
 export default function New({session,titles}:any) {
-  const[titless,setTitles]=useState<any>(titles)
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
   const[data,setData]=useState<any>({
@@ -46,6 +45,7 @@ const grow = (element:any) =>{
   setHeight(tempHeight);
 }
 const SaveData=async ()=>{
+  console.log(data)
   if(data.title===''){
     setError({
       error:true,
@@ -210,7 +210,6 @@ const SaveData=async ()=>{
             <EditerMarkdown source={content} />
           </MDEditor>
           <Space h="lg" />
-          {console.log(!(error.message==="Saved"))}
           <Stack align="center">
           <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
           <Dialog
@@ -232,10 +231,8 @@ const SaveData=async ()=>{
           </Stack>
           </>
         </Container>
-{/* {JSON.stringify(session)}
-{JSON.stringify(data)} */
-JSON.stringify(titless)
-}
+
+{JSON.stringify(data)}
     <Space h={"lg"} />
    </Base>
   )
@@ -257,7 +254,7 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
   return {
     props: {
       session,
-      title:titles
+      titles:titles
     },
   };
 }
