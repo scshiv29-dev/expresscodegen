@@ -220,12 +220,20 @@ const shortenUrl = async () => {
             flexDirection: "row",
             justifyContent: "space-between"
           }}>
-   {data.isShortened &&       <Input
+   {data.isShortened ?      <Input
           icon={<IconShare />}
            variant="filled"
             placeholder="Shortened Url"
             width={300}
              value={data.shortUrl}
+             disabled
+          />:
+          <Input
+          icon={<IconShare />}
+           variant="filled"
+            placeholder="Shortened Url"
+            width={300}
+             value={shareAble}
              disabled
           />}
           <Button onClick={()=>{navigator.clipboard.writeText(shareAble)}}>Copy</Button>
