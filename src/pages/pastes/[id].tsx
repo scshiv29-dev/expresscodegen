@@ -27,7 +27,7 @@ export default function One({id,paste,session}:any) {
   console.log(router.pathname);
   const url=`https://v2.crustulum/view/${id}`
     const [content,setContent]=useState<any>(paste.content)
-    const [shareAble,setShareAble]=useState(`${url}+${id}`)
+    const [shareAble,setShareAble]=useState(`${url}`)
     const [prevTitle,setPrevTitle]=useState(paste.title)
 const [error, setError] = useState<any>({
     error:false,
