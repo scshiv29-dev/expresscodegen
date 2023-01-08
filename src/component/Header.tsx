@@ -149,7 +149,7 @@ export default function Home() {
       fw={700} 
       onClick={() => router.push('/')} 
       style={{cursor:"pointer"}}
-      >Markdown Editor</Text>
+      >Crustulum V2</Text>
           <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
           <a onClick={() => router.push('/')}>Home</a>
           <Space w="lg" />

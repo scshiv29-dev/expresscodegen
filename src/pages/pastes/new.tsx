@@ -52,7 +52,7 @@ const SaveData=async ()=>{
     })
     return
   }
-  checkAlredyExists(data.title)
+
   
   if(data.isProtected && data.password===''){
     setError({
