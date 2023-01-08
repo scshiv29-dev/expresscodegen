@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { supasupabase,updatePaste } from '../../../lib/supabase';
+import { supabase, supasupabase,updatePaste } from '../../../lib/supabase';
 import { Button, Affix, Transition, Container, PasswordInput, Space, Switch, Text, Accordion, Stack,Notification, Input, Alert, Dialog } from '@mantine/core'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -24,6 +24,7 @@ const EditerMarkdown = dynamic(
 export default function One({id,paste,session}:any) {
     const [content,setContent]=useState<any>(paste.content)
     const [shareAble,setShareAble]=useState(`http://localhost:3000/view/${id}`)
+    const [prevTitle,setPrevTitle]=useState(paste.title)
 const [error, setError] = useState<any>({
     error:false,
     message:''
@@ -57,7 +58,19 @@ const [error, setError] = useState<any>({
     })
     return
     }
-
+    if(prevTitle!==data.title){
+      const {data:existingTitle, error}=await supabase
+      .from('pastes')
+      .select('id')
+      .eq('title', data.title)
+      if(existingTitle.length>0){
+        setError({
+          error:true,
+          message:'Title already exists'
+        })
+        return
+      }
+    }
     setError({
       error:false,
       message:'Saved'
@@ -82,12 +95,12 @@ const [error, setError] = useState<any>({
   },2000)
   const con=await updatePaste(id,session?.supabaseAccessToken,dataToSave)
   if(con){
-   setUpdated(true)
+   console.log('updated');
+   
   }
 }
 const [height,setHeight] = useState<any>(200)
 const [scroll, scrollTo] = useWindowScroll();
-const [updated, setUpdated] = useState(false);
 const grow = (element:any) =>{
   let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
   setHeight(tempHeight);
@@ -120,7 +133,7 @@ const shortenUrl = async () => {
       withAsterisk
       label="Title"
       description="Please give a title to your paste"
-      error={error.message==='Title is required'?error.message:''}
+      error={error.message==='Title is required' || error.message==='Title already exists' ?error.message:''}
     >
       <Input id="title" placeholder="Title" value={data.title}  onChange={(e)=>setData({...data,title:e.target.value})}/>
     </Input.Wrapper>

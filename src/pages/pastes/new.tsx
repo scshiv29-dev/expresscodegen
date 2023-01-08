@@ -23,7 +23,6 @@ const EditerMarkdown = dynamic(
 );
 
 export default function New({session,titles}:any) {
-
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
   const[data,setData]=useState<any>({
@@ -46,7 +45,6 @@ const grow = (element:any) =>{
   setHeight(tempHeight);
 }
 const SaveData=async ()=>{
-  console.log(data)
   if(data.title===''){
     setError({
       error:true,
@@ -54,13 +52,7 @@ const SaveData=async ()=>{
     })
     return
   }
-  if(data.title in titles){
-    console.log('title exists')
-    setError({
-      error:true,
-      message:'Title already exists'
-    })
-    
+  checkAlredyExists(data.title)
   
   if(data.isProtected && data.password===''){
     setError({
@@ -97,7 +89,7 @@ const SaveData=async ()=>{
    console.log(con)
    
   }
-  }
+  
 }
   return (
    <Base>
@@ -108,7 +100,7 @@ const SaveData=async ()=>{
       withAsterisk
       label="Title"
       description="Please give a title to your paste"
-      error={error.message==='Title is required'?error.message:''}
+      error={error.message==='Title is required' || error.message==='Title already exists' ?error.message:''}
     >
       <Input id="title" placeholder="Title"  onChange={(e)=>setData({...data,title:e.target.value})}/>
     </Input.Wrapper>
@@ -212,6 +204,7 @@ const SaveData=async ()=>{
             <EditerMarkdown source={content} />
           </MDEditor>
           <Space h="lg" />
+          {console.log(!(error.message==="Saved"))}
           <Stack align="center">
           <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
           <Dialog
@@ -233,8 +226,10 @@ const SaveData=async ()=>{
           </Stack>
           </>
         </Container>
+{/* { JSON.stringify(session)
+JSON.stringify(data) 
+JSON.stringify(titless)} */}
 
-{JSON.stringify(data)}
     <Space h={"lg"} />
    </Base>
   )
@@ -252,11 +247,12 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
     };
   }
   const titles=await getUserPasteTitles(session.user.id,session.supabaseAccessToken as string)
-  console.log("titles",titles)
+  console.log("server:",titles);
+  
   return {
     props: {
       session,
-      titles:titles
+      titles
     },
   };
 }
