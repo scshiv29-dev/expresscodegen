@@ -23,6 +23,8 @@ const EditerMarkdown = dynamic(
 );
 
 export default function New({session,titles}:any) {
+  console.log(titles);
+  
   const[titless,setTitles]=useState<any>(titles)
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
@@ -45,17 +47,7 @@ const grow = (element:any) =>{
   let tempHeight = element.target.scrollHeight < 200 ? 200: element.target.scrollHeight;
   setHeight(tempHeight);
 }
-const checkAlredyExists=async (title:string)=>{
-for(let i=0;i<titles.length;i++){
-  if(titles[i].title===title){
-    setError({
-      error:true,
-      message:'Title already exists'
-    })
-    return true
-  }
 const SaveData=async ()=>{
-  console.log(data)
   if(data.title===''){
     setError({
       error:true,
@@ -63,12 +55,14 @@ const SaveData=async ()=>{
     })
     return
   }
-  if(data.title in titles){
+  if(titles.includes(data.title)){
+    console.log("Title exists:",titles.includes(data.title));
     setError({
       error:true,
       message:'Title already exists'
     })
-    
+    return
+  } 
   
   if(data.isProtected && data.password===''){
     setError({
@@ -220,6 +214,7 @@ const SaveData=async ()=>{
             <EditerMarkdown source={content} />
           </MDEditor>
           <Space h="lg" />
+          {console.log(!(error.message==="Saved"))}
           <Stack align="center">
           <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => SaveData()}>Save</Button>
           <Dialog
@@ -241,10 +236,10 @@ const SaveData=async ()=>{
           </Stack>
           </>
         </Container>
-{/* {JSON.stringify(session)}
-{JSON.stringify(data)} */
-JSON.stringify(titless)
-}
+{/* { JSON.stringify(session)
+JSON.stringify(data) 
+JSON.stringify(titless)} */}
+
     <Space h={"lg"} />
    </Base>
   )
@@ -267,7 +262,7 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
   return {
     props: {
       session,
-      title:titles
+      titles
     },
   };
 }
