@@ -9,6 +9,7 @@ import { getSession, useSession } from 'next-auth/react';
 import {IconShare, IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconArrowUp, IconArrowDown ,IconCheck} from '@tabler/icons';
 import Base from '../../component/Base';
 import { useWindowScroll } from '@mantine/hooks';
+import { useRouter } from 'next/router';
 
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor"),
@@ -22,8 +23,11 @@ const EditerMarkdown = dynamic(
   { ssr: false }
 );
 export default function One({id,paste,session}:any) {
+  const router = useRouter()
+  console.log(router.pathname);
+  const url=`https://v2.crustulum/view/${id}`
     const [content,setContent]=useState<any>(paste.content)
-    const [shareAble,setShareAble]=useState(`http://localhost:3000/view/${id}`)
+    const [shareAble,setShareAble]=useState(`${url}+${id}`)
     const [prevTitle,setPrevTitle]=useState(paste.title)
 const [error, setError] = useState<any>({
     error:false,
@@ -63,13 +67,14 @@ const [error, setError] = useState<any>({
       .from('pastes')
       .select('id')
       .eq('title', data.title)
+      if(existingTitle){
       if(existingTitle.length>0){
         setError({
           error:true,
           message:'Title already exists'
         })
         return
-      }
+      }}
     }
     setError({
       error:false,
