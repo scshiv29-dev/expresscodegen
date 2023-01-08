@@ -1,5 +1,4 @@
 import React from 'react'
-import { useAuth } from '../../component/auth'
 import { getSession } from 'next-auth/react';
 import { getAllUserPastes, supasupabase } from '../../../lib/supabase';
 import Base from '../../component/Base';
@@ -130,7 +129,7 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
         }
         else{
                   const dd= await getAllUserPastes(session?.user?.id,session?.supabaseAccessToken as string)
-                  console.log(dd);
+                  
                   return {
         props: {
         session,

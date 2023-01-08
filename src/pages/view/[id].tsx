@@ -157,10 +157,10 @@ export async function getServerSideProps(context: {
         console.log(id);
          const data = await getPasteAndUpdateView(id)
         const user =await getUserDetails(data[0].user)
-        console.log("user",user);
+        
          if(data){
           const dd:any=data[0]
-          console.log(dd);
+          
           if(!dd.anonymous){
 
           }

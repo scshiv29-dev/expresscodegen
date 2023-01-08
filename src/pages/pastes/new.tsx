@@ -7,9 +7,9 @@ import dynamic from "next/dynamic";
 import { PasteR } from '../../../types';
 import { getSession, useSession } from 'next-auth/react';
 import { IconEyeCheck,IconEyeOff,IconSpyOff,IconSpy,IconLock,IconLockOpen, IconGrowth, IconArrowDown, IconArrowUp, IconCheck } from '@tabler/icons';
-import { createPaste } from '../../../lib/supabase';
+import { createPaste, getUserPasteTitles } from '../../../lib/supabase';
 import { useWindowScroll } from '@mantine/hooks';
-import { log } from 'console';
+
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor"),
   { ssr: false }
@@ -22,8 +22,8 @@ const EditerMarkdown = dynamic(
   { ssr: false }
 );
 
-export default function New({session}:any) {
-  
+export default function New({session,titles}:any) {
+  const[titless,setTitles]=useState<any>(titles)
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
   const[data,setData]=useState<any>({
@@ -47,10 +47,18 @@ const grow = (element:any) =>{
 }
 const SaveData=async ()=>{
   if(data.title===''){
-    setError(true)
+    setError({
+      error:true,
+      message:'Title is required'
+    })
     return
   }
-  
+  if(data.title in titles){
+    setError({
+      error:true,
+      message:'Title already exists'
+    })
+    
   
   if(data.isProtected && data.password===''){
     setError({
@@ -87,7 +95,7 @@ const SaveData=async ()=>{
    console.log(con)
    
   }
-
+  }
 }
   return (
    <Base>
@@ -172,6 +180,7 @@ const SaveData=async ()=>{
     </Container>
     <Space h={100} />
         <Container size={2000} px="xl">
+          <>
         <Affix position={{ bottom: 20, right: 20 }}>
           
         <Transition transition="slide-up" mounted={scroll.y > 0}>
@@ -221,9 +230,12 @@ const SaveData=async ()=>{
       >Saved</Text>
         </Dialog>
           </Stack>
+          </>
         </Container>
 {/* {JSON.stringify(session)}
-{JSON.stringify(data)} */}
+{JSON.stringify(data)} */
+JSON.stringify(titless)
+}
     <Space h={"lg"} />
    </Base>
   )
@@ -240,9 +252,12 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
       },
     };
   }
+  const titles=await getUserPasteTitles(session.user.id,session.supabaseAccessToken as string)
+  console.log("titles",titles)
   return {
     props: {
       session,
+      title:titles
     },
   };
 }
