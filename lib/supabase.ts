@@ -22,8 +22,6 @@ type Paste = {
 // ...
 // Use `useSession()` or `unstable_getServerSession()` to get the NextAuth session.
 export const supasupabase = (supabaseAccessToken: string | undefined) => {
-        console.log(process.env.NEXT_PUBLIC_SUPABASE_URL)
-        console.log(process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY)
         const supabase = createClient(
                 process.env.NEXT_PUBLIC_SUPABASE_URL as string,
                 process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string,
@@ -56,8 +54,10 @@ export const getPasteAndUpdateView = async (paste_id: string) => {
                 .from('pastes')
                 .select('*')
                 .eq('id', paste_id)
-        if (!data[0].isViewOnce) {
-                await supabase.rpc('increment_views', { row_id: paste_id })
+        if (data) {
+                if (!data[0].isViewOnce) {
+                        await supabase.rpc('increment_views', { row_id: paste_id })
+                }
         }
         if (error) {
                 console.log(error)
@@ -130,4 +130,22 @@ export const getUserDetails = async (user_id: string) => {
                 console.log(error)
         }
         return data;
+}
+export const getUserPasteTitles = async (user_id: string, token: string) => {
+        const supa = supasupabase(token)
+        const { data, error } = await supa
+                .from('pastes')
+                .select('title')
+                .eq('user', user_id)
+        if (error) {
+                console.log(error)
+        }
+        const arr = []
+        if (data) {
+                for (let i = 0; i < data.length; i++) {
+                        arr[i] = data[i].title
+                }
+        }
+
+        return arr;
 }
