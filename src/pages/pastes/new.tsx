@@ -23,6 +23,8 @@ const EditerMarkdown = dynamic(
 );
 
 export default function New({session,titles}:any) {
+  console.log(titles);
+  
   const[titless,setTitles]=useState<any>(titles)
   const [content,setContent]=useState<any>('')
   const [loading,setLoading]=useState<any>(false)
@@ -53,12 +55,14 @@ const SaveData=async ()=>{
     })
     return
   }
-  if(data.title in titles){
+  if(titles.includes(data.title)){
+    console.log("Title exists:",titles.includes(data.title));
     setError({
       error:true,
       message:'Title already exists'
     })
-    
+    return
+  } 
   
   if(data.isProtected && data.password===''){
     setError({
@@ -95,7 +99,7 @@ const SaveData=async ()=>{
    console.log(con)
    
   }
-  }
+  
 }
   return (
    <Base>
@@ -106,7 +110,7 @@ const SaveData=async ()=>{
       withAsterisk
       label="Title"
       description="Please give a title to your paste"
-      error={error.message==='Title is required'?error.message:''}
+      error={error.message==='Title is required' || error.message==='Title already exists' ?error.message:''}
     >
       <Input id="title" placeholder="Title"  onChange={(e)=>setData({...data,title:e.target.value})}/>
     </Input.Wrapper>
@@ -232,10 +236,10 @@ const SaveData=async ()=>{
           </Stack>
           </>
         </Container>
-{/* {JSON.stringify(session)}
-{JSON.stringify(data)} */
-JSON.stringify(titless)
-}
+{/* { JSON.stringify(session)
+JSON.stringify(data) 
+JSON.stringify(titless)} */}
+
     <Space h={"lg"} />
    </Base>
   )
@@ -253,11 +257,12 @@ export async function getServerSideProps(context: { req: any; res: any; }) {
     };
   }
   const titles=await getUserPasteTitles(session.user.id,session.supabaseAccessToken as string)
-  console.log("titles",titles)
+  console.log("server:",titles);
+  
   return {
     props: {
       session,
-      title:titles
+      titles
     },
   };
 }
