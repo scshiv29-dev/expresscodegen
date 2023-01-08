@@ -1,6 +1,6 @@
 import React from 'react'
 import { getSession } from 'next-auth/react';
-import { getAllUserPastes, supasupabase } from '../../../lib/supabase';
+import { getAllUserPastes, supasupabase ,deletePaste} from '../../../lib/supabase';
 import Base from '../../component/Base';
 import { createStyles, Box, Button, UnstyledButton, Text, Container, Anchor, Card, Group, SimpleGrid, Space, Avatar, HoverCard } from '@mantine/core';
 import { useRouter } from 'next/router';
@@ -36,7 +36,12 @@ const useStyles = createStyles((theme) => ({
 export default function Paste({pastes,session}:any) {
         const router=useRouter()
         const { classes, theme } = useStyles();
-
+const deletePasteHandler=async (id:any)=>{
+const data=await deletePaste(id,session.supabaseAccessToken)
+if(data){
+  router.reload()
+}
+}
   const items = pastes?.map((paste:any)=>(
     <UnstyledButton key={paste.id} className={classes.item} onClick={()=>router.push(`/pastes/${paste.id}`)}>
       <HoverCard>
