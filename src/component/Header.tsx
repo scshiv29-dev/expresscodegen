@@ -1,6 +1,5 @@
-
 import { useRouter } from 'next/router'
-import { useSession,signIn,signOut } from 'next-auth/react'
+
 import {
     createStyles,
     Header,
@@ -23,7 +22,7 @@ import {
     Avatar,
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
-import { IconChevronDown, IconH1, IconLivePhoto, IconLayoutGridAdd, IconAdjustments } from '@tabler/icons';
+import { IconChevronDown, IconRoute, IconClock, IconDeviceGamepad, IconSchema } from '@tabler/icons';
 
 
   
@@ -90,34 +89,35 @@ import { IconChevronDown, IconH1, IconLivePhoto, IconLayoutGridAdd, IconAdjustme
 
 export default function Home() {
   const router = useRouter()
-  const {data:session} = useSession()
+
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-  const features = [
-    {
-      icon: IconH1,
-      title: 'Rich Markdown editor',
-      description: "Using our Markdown syntax highlighting, you'll be able to visualise final rendering of your documents",
-    },
-    {
-      icon: IconAdjustments,
-      title: 'Controls',
-      description: 'Easy to use controls to make your documents look the way you want them to',
-    },
-    {
-      icon: IconLayoutGridAdd,
-      title: 'Elegant layout',
-      description:
-        "Whatever you do... Markdown Editor's layout provides the flexibility you need, without sacrificing quality.",
-    },
-    {
-      icon: IconLivePhoto,
-      title: 'Scroll synchronized live preview.',
-      description:
-        'By using Scroll Sync, you are always able to see the output if you are writing while simultaneously scrolling the editor or preview panels.',
-    },
-  ];
+const features = [
+  {
+    icon: IconRoute,
+    title: 'Generate routes for express app',
+    description: "Using the code generator you can easily generate routes for your express app",
+  },
+  {
+    icon: IconDeviceGamepad,
+    title: 'Controllers',
+    description: 'Generate controllers for your express app',
+  },
+  {
+    icon: IconSchema,
+    title: 'Schema',
+    description:
+      "Generate schema database for your express app.",
+  },
+  {
+    icon: IconClock,
+    title: 'Save time',
+    description:
+      'Save time by generating code for your express app',
+  },
+];
+
   const links = features.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
       <Group noWrap align="flex-start">
@@ -149,11 +149,14 @@ export default function Home() {
       fw={700} 
       onClick={() => router.push('/')} 
       style={{cursor:"pointer"}}
-      >Crustulum V2</Text>
+      >Mongo Express Generator</Text>
           <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
           <a onClick={() => router.push('/')}>Home</a>
           <Space w="lg" />
-          {session && (<a onClick={() => router.push('/pastes')}>View Pastes</a>)}
+          
+          <a onClick={() => router.push('/model')}>Models</a>  <Space w="lg" />
+          <a onClick={() => router.push('/route')}>Routes</a>  <Space w="lg" />
+          <a onClick={() => router.push('/controller')}>Controller</a>  <Space w="lg" />
           <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
               <HoverCard.Target>
                 <a href="#" className={classes.link}>
@@ -183,32 +186,7 @@ export default function Home() {
               </HoverCard.Dropdown>
             </HoverCard>
           </Group>
-          {session && (
-  <Group position="center" className={classes.hiddenMobile}  pb="xl" px="md" mt="sm">  
-  
-  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign Out</Button>
-  <HoverCard  shadow="md" >
-        <HoverCard.Target>
-  
-        <Avatar src={session.user.image} radius={"xl"} size={45} style={{objectFit: "cover"}} />
-
-        </HoverCard.Target>
-        <HoverCard.Dropdown>
-          <Text size="sm">
-          {session.user.name}
-          </Text>
-        </HoverCard.Dropdown>
-      </HoverCard>
-  </Group>  
-  )}
-{!session && (
-    <>
-  <Group position="center" className={classes.hiddenMobile} pb="xl" px="md" mt="sm"> 
-  <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signIn()}>Sign In</Button>
-
-  </Group>
-  </>
-)}
+      
 
           <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
         </Group>
@@ -227,6 +205,9 @@ export default function Home() {
           <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
           <a onClick={() => router.push('/')}>Home</a>
+          <a onClick={() => router.push('/model')}>Models</a>
+          <a onClick={() => router.push('/route')}>Routes</a>
+          <a onClick={() => router.push('/controller')}>Controller</a>
           <Space w="lg" />
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
@@ -237,20 +218,9 @@ export default function Home() {
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{links}</Collapse>
-          {session && (<a onClick={() => router.push('/pastes')}>View Pastes</a>)}
+          
           <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-          {session && (
-  <Group position="center" grow pb="xl" px="md" mt="sm">  
-    <Button variant="gradient" gradient={{ from: 'orange', to: 'red' }} onClick={() => signOut()}>Sign Out</Button>
-  </Group>
-  
-)}
-{!session && (
-  <Group position="center" grow pb="xl" px="md" mt="sm"> 
-    <Button onClick={() => signIn()}>Sign in</Button>
-  </Group>
-)}
         </ScrollArea>
       </Drawer>
     </Box>

@@ -1,9 +1,9 @@
 import { Container, Divider, Space, Text, createStyles, Title, SimpleGrid, Button, ThemeIcon, Grid, Col  } from "@mantine/core"
 import styles from "../styles/Home.module.css"
-import { IconArrowDown, IconH1, IconLivePhoto, IconLayoutGridAdd, IconAdjustments } from '@tabler/icons';
+import { IconArrowDown, IconRoute, IconDeviceGamepad, IconSchema, IconClock } from '@tabler/icons';
 import Link from "next/link";
 import { useRouter } from 'next/router'
-import { useSession,signIn,signOut } from 'next-auth/react'
+
 const useStyles = createStyles((theme) => ({
   wrapper: {
     padding: `${theme.spacing.xl * 2}px ${theme.spacing.xl}px`,
@@ -21,33 +21,32 @@ const useStyles = createStyles((theme) => ({
 
 const features = [
   {
-    icon: IconH1,
-    title: 'Rich Markdown editor',
-    description: "Using our Markdown syntax highlighting, you'll be able to visualise final rendering of your documents",
+    icon: IconRoute,
+    title: 'Generate routes for express app',
+    description: "Using the code generator you can easily generate routes for your express app",
   },
   {
-    icon: IconAdjustments,
-    title: 'Controls',
-    description: 'Easy to use controls to make your documents look the way you want them to',
+    icon: IconDeviceGamepad,
+    title: 'Controllers',
+    description: 'Generate controllers for your express app',
   },
   {
-    icon: IconLayoutGridAdd,
-    title: 'Elegant layout',
+    icon: IconSchema,
+    title: 'Schema',
     description:
-      "Whatever you do... Markdown Editor's layout provides the flexibility you need, without sacrificing quality.",
+      "Generate schema database for your express app.",
   },
   {
-    icon: IconLivePhoto,
-    title: 'Scroll synchronized live preview.',
+    icon: IconClock,
+    title: 'Save time',
     description:
-      'By using Scroll Sync, you are always able to see the output if you are writing while simultaneously scrolling the editor or preview panels.',
+      'Save time by generating code for your express app',
   },
 ];
 
 
 export default function Home() {
   const router = useRouter()
-  const {data:session} = useSession()
   const { classes } = useStyles();
   const items = features.map((feature) => (
     <div key={feature.title}>
@@ -73,14 +72,14 @@ export default function Home() {
 
     <div className={styles.flexer} >
     <div className={styles.text}>
-      MARKDOWN EDITOR
+     Mongo Express Generator
     </div>
 <Text
 sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
 ta="center"
 fz={25}
 fw={600}
->In-browser Markdown editor</Text>
+>Code Generator for mongo express app</Text>
  </div>
  <div className={styles.read}>
   <Link href="#features" style={{width: "inherit"}} scroll={false}>
@@ -105,11 +104,11 @@ Read more</Text>
       <Grid gutter={80}>
         <Col span={12} md={5}>
           <Title className={classes.title} order={2}>
-          Unrivalled writing experience
+         Code gen for Mern  Backend
           </Title>
           <Text color="dimmed">
-          Markdown editor is an intuitive and lightweight text-to-HTML conversion tool for web content writers. 
-          You can use it to format lists, headers, and for emphasis, as well as to incorporate links and images. 
+        Code generator for mongo express app
+        using mongoose and express
           </Text>
 
           <Button
@@ -118,7 +117,7 @@ Read more</Text>
             size="lg"
             radius="md"
             mt="xl"
-            onClick={session?() => router.push('/pastes'):() => signIn()}
+            onClick={() => router.push('/model')}
           >
             Get started
           </Button>
