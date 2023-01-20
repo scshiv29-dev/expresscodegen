@@ -72,12 +72,12 @@ const addNewFeild=()=>{
 
   return (
     <div>
-      <Input placeholder="Model name"  style={{"width":"50%"}} onChange={(e)=>setModelName(e.target.value)}/>
+      <Input placeholder="Model name"  style={{"width":"50%"}} onChange={(e:any)=>setModelName(e.target.value)}/>
 <Divider/>
 {
   value.map((item,index) => (
     <div key={index} style={{"width":"50%"}}>
-      <Input placeholder="Field name" value={item.name} onChange={(e)=>changeText(index,e.target.value)} />
+      <Input placeholder="Field name" value={item.name} onChange={(e:any)=>changeText(index,e.target.value)} />
       <label>
         Type 
       </label>
@@ -91,13 +91,13 @@ const addNewFeild=()=>{
       <Checkbox label="Unique"  color={"green"} checked={item.unique} onChange={()=>changeCheck(index,"unq")}/>
       <Checkbox label="Default"  color={"green"} checked={item.default.has} onChange={()=>changeCheck(index,"def")} />
       {item.default.has &&
-      <Input placeholder="Default value" value={item.default.value} onChange={(e)=>{changeDefault(index,e.target.value)}}/>
+      <Input placeholder="Default value" value={item.default.value} onChange={(e:any)=>{changeDefault(index,e.target.value)}}/>
 }
       {item.type==="String" &&
       <>
       <Checkbox label="Trim"  color={"green"} onChange={()=>{changeCheck(index,"trim")}}/>
-      <Input placeholder="Max length" value={item.maxlength} onChange={(e)=>{changeMaxlenght(index,e.target.value)}}/>
-      <Input placeholder="Min length" value={item.minlength} onChange={(e)=>{changeMinlenght(index,e.target.value)}}/>
+      <Input placeholder="Max length" value={item.maxlength} onChange={(e:any)=>{changeMaxlenght(index,e.target.value)}}/>
+      <Input placeholder="Min length" value={item.minlength} onChange={(e:any)=>{changeMinlenght(index,e.target.value)}}/>
 
       </>
       }

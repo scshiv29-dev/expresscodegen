@@ -199,25 +199,7 @@ const features = [
         className={classes.hiddenDesktop}
         zIndex={1000000}
       >
-        <ScrollArea sx={{ height: 'calc(100vh - 60px)' }} mx="-md">
-          <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-          <a onClick={() => router.push('/')}>Home</a>
-          <a onClick={() => router.push('/generate')}>Generate</a>
-          <Space w="lg" />
-          <UnstyledButton className={classes.link} onClick={toggleLinks}>
-            <Center inline>
-              <Box component="span" mr={5}>
-                Features
-              </Box>
-              <IconChevronDown size={16} color={theme.fn.primaryColor()} />
-            </Center>
-          </UnstyledButton>
-          <Collapse in={linksOpened}>{links}</Collapse>
-          
-          <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
-
-        </ScrollArea>
       </Drawer>
     </Box>
 
