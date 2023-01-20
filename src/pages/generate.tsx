@@ -87,7 +87,7 @@ const addNewFeild=()=>{
   <option value="Boolean">Boolean</option>
   <option value="Array">Array</option>
  </select>
-      <Checkbox label="Required" icon={IconAsterisk} color="green" checked={item.required} onChange={()=>changeCheck(index,"req")}/>
+      <Checkbox label="Required" icon={<IconAsterisk/>} color="green" checked={item.required} onChange={()=>changeCheck(index,"req")}/>
       <Checkbox label="Unique"  color={"green"} checked={item.unique} onChange={()=>changeCheck(index,"unq")}/>
       <Checkbox label="Default"  color={"green"} checked={item.default.has} onChange={()=>changeCheck(index,"def")} />
       {item.default.has &&
