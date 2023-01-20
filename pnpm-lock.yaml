@@ -8,6 +8,7 @@ specifiers:
   '@mantine/hooks': 5.9.6
   '@mantine/prism': 5.9.6
   '@next/font': 13.1.1
+  '@tabler/icons': ^1.119.0
   '@types/node': 18.11.18
   '@types/react': 18.0.26
   '@types/react-dom': 18.0.10
@@ -30,10 +31,11 @@ dependencies:
   '@babel/core': 7.20.7
   '@emotion/react': 11.10.5_3grbeiqrb6djg67fiejiqngkdi
   '@mantine/core': 5.9.5_ly3tyqdhtptismqenscq5gqjb4
-  '@mantine/ds': 5.9.6_bskc5qrhypeymkqxytse4g3bqm
+  '@mantine/ds': 5.9.6_i4elqgi54q7vqtxzecx7yeyvyi
   '@mantine/hooks': 5.9.6_react@18.2.0
   '@mantine/prism': 5.9.6_ggnaoypdxsswxihrygs5fahjd4
   '@next/font': 13.1.1
+  '@tabler/icons': 1.119.0_biqbaboplfbrettd7655fr4n2y
   '@types/node': 18.11.18
   '@types/react': 18.0.26
   '@types/react-dom': 18.0.10
@@ -514,7 +516,7 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mantine/ds/5.9.6_bskc5qrhypeymkqxytse4g3bqm:
+  /@mantine/ds/5.9.6_i4elqgi54q7vqtxzecx7yeyvyi:
     resolution: {integrity: sha512-XTYifs3pjGXQG9WuUi/KEYfpdnZ+TdqWdYAJM9InuQWuSBpBPEWSLjhYy1pFGEGeYoCQs0wEubBv9W8Lx+lo0w==}
     peerDependencies:
       '@mantine/core': 5.9.6
@@ -528,6 +530,7 @@ packages:
       '@mantine/hooks': 5.9.6_react@18.2.0
       '@mantine/prism': 5.9.6_ggnaoypdxsswxihrygs5fahjd4
       '@mantine/utils': 5.9.6_react@18.2.0
+      '@tabler/icons': 1.119.0_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false
@@ -905,6 +908,21 @@ packages:
     resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
     dependencies:
       tslib: 2.4.1
+    dev: false
+
+  /@tabler/icons/1.119.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-Fk3Qq4w2SXcTjc/n1cuL5bccPkylrOMo7cYpQIf/yw6zP76LQV9dtLcHQUjFiUnaYuswR645CnURIhlafyAh9g==}
+    peerDependencies:
+      react: ^16.x || 17.x || 18.x
+      react-dom: ^16.x || 17.x || 18.x
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@types/acorn/4.0.6:
