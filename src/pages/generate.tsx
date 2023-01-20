@@ -1,18 +1,22 @@
 import React, { useState ,useEffect} from 'react'
 import { Autocomplete,Button,Checkbox,Code,Divider,Input,Select } from '@mantine/core'
 import { IconAsterisk, IconPlus } from '@tabler/icons';
-import { generateModel } from '../../utlis/generateModel';
+import { generateModel } from '../utils/generateModel';
 export default function Models() {
   const [value, setValue] = React.useState([{
-    name: '',
+    name: 'name',
     type: 'String',
-    required:false,
-    unique: false,
-    trim:false,
-    maxlength:0,
-    minlength:0
+    required:true,
+    unique: true,
+    trim:true,
+    maxlength:32,
+    minlength:0,
+    default:{
+      has:false,
+      value:""
+    }
   }]);
-const [modelName,setModelName]=useState("")
+const [modelName,setModelName]=useState("Category")
 const [code,setCode]=useState("")
 
 const generateCode=()=>{
@@ -40,12 +44,6 @@ const changeMinlenght=(ind:number,data:number)=>{
 value[ind].minlength=data;
 setValue([...value])
 }
-
-const changeTrim=(ind:number)=>{
-value[ind].trim=!value[ind].trim;
-setValue([...value])
-}
-
 const changeCheck=(ind:number,nm:string)=>{
   if(nm==="req"){
     value[ind].required=!value[ind].required;
@@ -55,9 +53,21 @@ const changeCheck=(ind:number,nm:string)=>{
      value[ind].unique=!value[ind].unique;
     setValue([...value])
   }
+  if(nm==="trim"){
+      value[ind].trim=!value[ind].trim;
+      setValue([...value])
+    }
+  if(nm==="def"){
+      value[ind].default.has=!value[ind].default.has;
+      setValue([...value])
+    }
+}
+const changeDefault=(ind:number,data:any)=>{
+  value[ind].default.value=data;
+  setValue([...value])
 }
 const addNewFeild=()=>{
-   setValue([...value,{name:"",type:"",required:false,unique:false,trim:false,maxlength:0,minlength:0}])
+   setValue([...value,{name:"",type:"",required:false,unique:false,trim:false,maxlength:0,minlength:0,default:{has:false,value:""}}])
 }
 
   return (
@@ -79,9 +89,13 @@ const addNewFeild=()=>{
  </select>
       <Checkbox label="Required" icon={IconAsterisk} color="green" checked={item.required} onChange={()=>changeCheck(index,"req")}/>
       <Checkbox label="Unique"  color={"green"} checked={item.unique} onChange={()=>changeCheck(index,"unq")}/>
+      <Checkbox label="Default"  color={"green"} checked={item.default.has} onChange={()=>changeCheck(index,"def")} />
+      {item.default.has &&
+      <Input placeholder="Default value" value={item.default.value} onChange={(e)=>{changeDefault(index,e.target.value)}}/>
+}
       {item.type==="String" &&
       <>
-      <Checkbox label="Trim"  color={"green"} onChange={()=>{changeTrim(index)}}/>
+      <Checkbox label="Trim"  color={"green"} onChange={()=>{changeCheck(index,"trim")}}/>
       <Input placeholder="Max length" value={item.maxlength} onChange={(e)=>{changeMaxlenght(index,e.target.value)}}/>
       <Input placeholder="Min length" value={item.minlength} onChange={(e)=>{changeMinlenght(index,e.target.value)}}/>
 

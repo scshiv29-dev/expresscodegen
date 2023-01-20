@@ -154,9 +154,7 @@ const features = [
           <a onClick={() => router.push('/')}>Home</a>
           <Space w="lg" />
           
-          <a onClick={() => router.push('/model')}>Models</a>  <Space w="lg" />
-          <a onClick={() => router.push('/route')}>Routes</a>  <Space w="lg" />
-          <a onClick={() => router.push('/controller')}>Controller</a>  <Space w="lg" />
+          <a onClick={() => router.push('/generate')}>Generate</a>  <Space w="lg" />
           <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
               <HoverCard.Target>
                 <a href="#" className={classes.link}>
@@ -205,9 +203,7 @@ const features = [
           <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
           <a onClick={() => router.push('/')}>Home</a>
-          <a onClick={() => router.push('/model')}>Models</a>
-          <a onClick={() => router.push('/route')}>Routes</a>
-          <a onClick={() => router.push('/controller')}>Controller</a>
+          <a onClick={() => router.push('/generate')}>Generate</a>
           <Space w="lg" />
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
