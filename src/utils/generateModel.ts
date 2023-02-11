@@ -7,7 +7,7 @@ const router = express.Router();
 
 `
         const captialize = `${ModelName.charAt(0).toUpperCase()}${ModelName.slice(1)}`
-        const exports = `const ${captialize} = mongoose.model('${captialize}',${ModelName}Schema};`
+        const exports = `const ${captialize} = mongoose.model('${captialize}',${ModelName}Schema);`
         let properties = '';
 
         Object.entries(data).forEach(([key, value]: any) => {
